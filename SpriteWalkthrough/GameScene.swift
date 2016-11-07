@@ -37,7 +37,11 @@ class GameScene: BaseScene{
         return
     }
     let moveAction = createMoveAction()
-    helloNode.run(moveAction)
+    helloNode.run(moveAction){
+      let spaceshipScene = SpaceShipScene(size: self.size)
+      let transition = SKTransition.doorsOpenVertical(withDuration: 0.5)
+      self.view?.presentScene(spaceshipScene, transition: transition)
+    }
   }
   
   func createMoveAction() -> SKAction{
@@ -48,5 +52,14 @@ class GameScene: BaseScene{
     let remove = SKAction.removeFromParent()
     return SKAction.sequence([moveUp, zoom, pause, fadeAway, remove])
       
+  }
+}
+
+class SpaceShipScene: BaseScene{
+  override func onCreateSceneContents() {
+    super.onCreateSceneContents()
+    backgroundColor = .black
+    scaleMode = .aspectFit
+    
   }
 }
