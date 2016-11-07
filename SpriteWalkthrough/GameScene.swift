@@ -10,6 +10,10 @@
 import SpriteKit
 import GameplayKit
 
+enum NodeIdentifier:String{
+    case hello = "hello"
+}
+
 class GameScene: BaseScene{
   
   override func onCreateSceneContents() {
@@ -24,7 +28,25 @@ class GameScene: BaseScene{
     helloNode.text = "Hello World!"
     helloNode.fontSize = 42
     helloNode.position = CGPoint(x: frame.midX, y: frame.midY)
-    
+    helloNode.name = NodeIdentifier.hello.rawValue
     return helloNode
+  }
+  
+  override func touchDown(atPoint pos: CGPoint) {
+    guard let helloNode = childNode(withName: NodeIdentifier.hello.rawValue) else {
+        return
+    }
+    let moveAction = createMoveAction()
+    helloNode.run(moveAction)
+  }
+  
+  func createMoveAction() -> SKAction{
+    let moveUp = SKAction.moveBy(x: 0, y: 100, duration: 0.5)
+    let zoom = SKAction.scale(to: 2.0, duration: 0.5)
+    let pause = SKAction.wait(forDuration: 0.5)
+    let fadeAway = SKAction.fadeOut(withDuration: 0.25)
+    let remove = SKAction.removeFromParent()
+    return SKAction.sequence([moveUp, zoom, pause, fadeAway, remove])
+      
   }
 }
