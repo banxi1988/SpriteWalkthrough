@@ -15,6 +15,20 @@ import GameplayKit
 class BaseScene: SKScene {
   
   private var lastUpdateTime : TimeInterval = 0
+  private var contentCreated = false
+  
+  override func didMove(to view: SKView) {
+    super.didMove(to: view)
+    if !contentCreated{
+      onCreateSceneContents()
+      contentCreated = true
+    }
+  }
+  
+  
+  public func onCreateSceneContents(){
+    
+  }
   
   func touchDown(atPoint pos : CGPoint) {
   }

@@ -12,4 +12,19 @@ import GameplayKit
 
 class GameScene: BaseScene{
   
+  override func onCreateSceneContents() {
+    super.onCreateSceneContents()
+    backgroundColor = SKColor.blue
+    scaleMode = .aspectFit
+    addChild(makeHelloNode())
+  }
+  
+  func makeHelloNode() -> SKLabelNode{
+    let helloNode = SKLabelNode(fontNamed: "Chalkduster")
+    helloNode.text = "Hello World!"
+    helloNode.fontSize = 42
+    helloNode.position = CGPoint(x: frame.midX, y: frame.midY)
+    
+    return helloNode
+  }
 }
