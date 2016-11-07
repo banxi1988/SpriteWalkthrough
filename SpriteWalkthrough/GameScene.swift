@@ -13,6 +13,7 @@ import GameplayKit
 enum NodeIdentifier:String{
     case hello = "hello"
     case spaceship = "spaceship"
+    case rock = "rock"
 }
 
 class GameScene: BaseScene{
@@ -56,6 +57,7 @@ class GameScene: BaseScene{
   }
 }
 
+
 class SpaceShipScene: BaseScene{
   override func onCreateSceneContents() {
     super.onCreateSceneContents()
@@ -65,10 +67,44 @@ class SpaceShipScene: BaseScene{
     spaceship.position = CGPoint(x: frame.midX, y: frame.midY - 120)
     addChild(spaceship)
     
+    let makeRocks = SKAction.sequence([
+      SKAction.perform(#selector(addRock), onTarget: self),
+      SKAction.wait(forDuration: 0.1, withRange: 0.15)
+    ])
+    
+    self.run(SKAction.repeatForever(makeRocks))
+    
+  }
+  
+  
+  public func addRock(){
+    let rock = SKSpriteNode(color: .brown, size: CGSize(width: 8, height: 8))
+    let skyRandom = GKRandomDistribution(lowestValue: 0, highestValue: Int(self.size.width))
+    rock.position = CGPoint(x: CGFloat(skyRandom.nextInt()), y: self.size.height - 50)
+    rock.name = NodeIdentifier.rock.rawValue
+    
+    rock.physicsBody = SKPhysicsBody(rectangleOf: rock.size)
+    rock.physicsBody?.usesPreciseCollisionDetection = true
+    
+    addChild(rock)
+  }
+  
+  
+  override func didSimulatePhysics() {
+    super.didSimulatePhysics()
+    for node in children{
+      if node.name == NodeIdentifier.rock.rawValue{
+        if node.position.y < 0{
+          node.removeFromParent()
+        }
+      }
+    }
   }
   
   func makeSpaceshipNode() -> SKSpriteNode{
     let hull = SKSpriteNode(imageNamed: "Spaceship")
+    hull.physicsBody = SKPhysicsBody(rectangleOf: hull.size)
+    hull.physicsBody?.isDynamic = false
     
     let light1 = makeLightNode()
     light1.position = CGPoint(x: -55, y: 6)
