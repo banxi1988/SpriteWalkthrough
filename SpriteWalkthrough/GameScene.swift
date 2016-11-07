@@ -12,6 +12,7 @@ import GameplayKit
 
 enum NodeIdentifier:String{
     case hello = "hello"
+    case spaceship = "spaceship"
 }
 
 class GameScene: BaseScene{
@@ -60,6 +61,45 @@ class SpaceShipScene: BaseScene{
     super.onCreateSceneContents()
     backgroundColor = .black
     scaleMode = .aspectFit
+    let spaceship = makeSpaceshipNode()
+    spaceship.position = CGPoint(x: frame.midX, y: frame.midY - 120)
+    addChild(spaceship)
     
+  }
+  
+  func makeSpaceshipNode() -> SKSpriteNode{
+    let hull = SKSpriteNode(imageNamed: "Spaceship")
+    
+    let light1 = makeLightNode()
+    light1.position = CGPoint(x: -55, y: 6)
+    hull.addChild(light1)
+    
+    let light2 = makeLightNode()
+    light2.position = CGPoint(x: 55, y: 6)
+    hull.addChild(light2)
+    
+    let hover = SKAction.sequence([
+        SKAction.wait(forDuration: 1.0),
+        SKAction.moveBy(x: 100, y: 50, duration: 1.0),
+        SKAction.wait(forDuration: 1.0),
+        SKAction.moveBy(x: -100, y: -50, duration: 1.0)
+      ])
+    hull.run(SKAction.repeatForever(hover))
+    
+
+    
+    return hull
+  }
+  
+  
+  func makeLightNode() -> SKSpriteNode{
+    let light = SKSpriteNode(color: .yellow, size: CGSize(width: 8, height: 8))
+    let blink = SKAction.sequence([
+        SKAction.fadeOut(withDuration: 0.25),
+        SKAction.fadeIn(withDuration: 0.25)
+      ])
+    let blinkForever = SKAction.repeatForever(blink)
+    light.run(blinkForever)
+    return light
   }
 }
