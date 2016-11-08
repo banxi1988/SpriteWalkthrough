@@ -78,13 +78,17 @@ class SpaceShipScene: BaseScene{
   
   
   public func addRock(){
-    let rock = SKSpriteNode(color: .brown, size: CGSize(width: 8, height: 8))
+    let rock = SKSpriteNode(imageNamed: "rock")
+    rock.color = .brown
+    
     let skyRandom = GKRandomDistribution(lowestValue: 0, highestValue: Int(self.size.width))
     rock.position = CGPoint(x: CGFloat(skyRandom.nextInt()), y: self.size.height - 50)
     rock.name = NodeIdentifier.rock.rawValue
     
     rock.physicsBody = SKPhysicsBody(rectangleOf: rock.size)
     rock.physicsBody?.usesPreciseCollisionDetection = true
+    let factorRandom = GKRandomDistribution(lowestValue: 10, highestValue: 200)
+    rock.colorBlendFactor =  CGFloat(factorRandom.nextInt())  / 200.0
     
     addChild(rock)
   }
@@ -121,6 +125,15 @@ class SpaceShipScene: BaseScene{
         SKAction.moveBy(x: -100, y: -50, duration: 1.0)
       ])
     hull.run(SKAction.repeatForever(hover))
+    
+    hull.color = .yellow
+    let pulseAction = SKAction.sequence([
+        SKAction.colorize(with: .red, colorBlendFactor: 0.3, duration: 0.15),
+        SKAction.wait(forDuration: 0.15, withRange: 0.1),
+        SKAction.colorize(withColorBlendFactor: 0.0, duration: 0.15)
+      ])
+    
+    hull.run(SKAction.repeatForever(pulseAction))
     
 
     
