@@ -64,6 +64,7 @@ class SpaceShipScene: BaseScene{
     backgroundColor = .black
     scaleMode = .aspectFit
     let spaceship = makeSpaceshipNode()
+    spaceship.name = NodeIdentifier.spaceship.rawValue
     spaceship.position = CGPoint(x: frame.midX, y: frame.midY - 120)
     addChild(spaceship)
     
@@ -74,6 +75,12 @@ class SpaceShipScene: BaseScene{
     
     self.run(SKAction.repeatForever(makeRocks))
     
+  }
+  
+  override func touchDown(atPoint pos: CGPoint) {
+     let move = SKAction.move(to: pos, duration: 0.25)
+     move.timingMode = SKActionTimingMode.easeIn
+     childNode(withName: NodeIdentifier.spaceship.rawValue)?.run(move)
   }
   
   
